@@ -1,0 +1,42 @@
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" routerLink="">
+        <img src="assets/layout/images/{{appMain.config.dark ? 'logo-white' : 'logo-dark'}}.svg" alt="logo">
+        <span>Etcd Manager</span>
+    </a>
+
+    <a class="p-link layout-topbar-menu-button layout-topbar-button" href="#" (click)="appMain.toggleTopMenu($event)">
+        <i aria-hidden="true" class="pi pi-ellipsis-v"></i>
+    </a>
+    <p-dropdown styleClass="dropdown-select-connection" [(ngModel)]="selectedConnection" [filter]="true"
+        (onChange)="onSelectConnection($event)" [options]="connections" optionLabel="name" optionValue="id"
+        placeholder="Select connection...">
+    </p-dropdown>
+    <div class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active':appMain.topMenuActive}">
+        <a *ngIf="hasManageUserPermission" (click)="onClickPage.emit('/connection-manager')"
+            class="p-link layout-topbar-button" pTooltip="Connection manager" tooltipPosition="bottom">
+            <i aria-hidden="true" class="pi pi-cog"></i>
+            <span>Connection manager</span>
+        </a>
+        <a *ngIf="hasManageUserPermission" (click)="onClickPage.emit('/user-manager')"
+            class="p-link layout-topbar-button" pTooltip="User manager" tooltipPosition="bottom">
+            <i aria-hidden="true" class="pi pi-users"></i>
+            <span>User manager</span>
+        </a>
+        <p-menu #menu [popup]="true" [model]="userMenuItems"></p-menu>
+        <div *ngIf="authenService.hasValidAccessToken()" (click)="menu.toggle($event)" class="user-topbar">
+            <p-avatar icon="pi pi-user" shape="circle"></p-avatar>
+            <span>Hello {{user?.userName}}</span>
+        </div>
+    </div>
+</div>
+<p-dialog header="Change my password" [(visible)]="showChangeMyPassword"
+    [style]="{'min-with': '600px', 'min-height': '450px', width: '600px', height: '450px' }" [closeOnEscape]="true"
+    [appendTo]="'body'" [focusOnShow]="false" [focusTrap]="false" [modal]="true" [responsive]="true"
+    [maximizable]="true" [autoZIndex]="true" #dialog>
+    <app-change-my-password [dialog]="dialog" #changeMyPassword></app-change-my-password>
+    <ng-template pTemplate="footer">
+        <button *ngFor="let button of changeMyPassword.buttons" pButton aria-label="button" [class]="button.styleClass"
+            [disabled]="button.disabled" type="button" [icon]="button.icon" (click)="button.command($event)"
+            [label]="button.label"></button>
+    </ng-template>
+</p-dialog>

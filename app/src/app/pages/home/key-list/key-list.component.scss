@@ -1,0 +1,15 @@
+.key-list-item {
+    width: 100%;
+
+    i {
+        margin-right: 10px;
+    }
+}
+
+.button-header {
+    &:hover {
+        cursor: pointer;
+    }
+
+    margin-right:20px;
+}

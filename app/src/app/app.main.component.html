@@ -1,0 +1,34 @@
+<div *ngIf="pageLoaded" class="layout-wrapper"
+    [ngClass]="{'layout-overlay':isOverlay(),
+                                'layout-static':isStatic(),
+                                'layout-theme-light':!config.dark,
+                                'layout-theme-dark':config.dark,
+                                'layout-overlay-sidebar-active': overlayMenuActive,
+                                'layout-static-sidebar-inactive': staticMenuInactive,
+                                'layout-mobile-sidebar-active':menuActiveMobile,
+                                'p-ripple-disabled': !config.ripple, 'p-input-filled': config.inputStyle === 'filled'}">
+    <app-topbar (onClickPage)="onClickPageTopbar($event)"></app-topbar>
+    <div class="layout-main-container">
+        <div class="layout-main">
+            <router-outlet></router-outlet>
+        </div>
+        <app-footer></app-footer>
+    </div>
+    <app-config></app-config>
+    <div *ngIf="menuActiveMobile" class="layout-mask p-component-overlay"></div>
+</div>
+
+<ng-container *ngIf="dipslaySidebar['/connection-manager']">
+    <p-sidebar [(visible)]="dipslaySidebar['/connection-manager']" styleClass="p-sidebar-lg" position="right" #sidebar>
+        <app-connection-manager (closeForm)="dipslaySidebar['/connection-manager'] = false"></app-connection-manager>
+    </p-sidebar>
+</ng-container>
+
+<ng-container *ngIf="dipslaySidebar['/user-manager']">
+    <p-sidebar [(visible)]="dipslaySidebar['/user-manager']" styleClass="p-sidebar-lg" position="right">
+        <app-user-manager></app-user-manager>
+    </p-sidebar>
+</ng-container>
+<p-toast position="bottom-right"></p-toast>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-confirmPopup [key]="'confirmPopup'"></p-confirmPopup>
